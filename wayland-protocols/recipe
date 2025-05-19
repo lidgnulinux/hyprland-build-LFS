@@ -1,0 +1,47 @@
+# Build recipe for wayland-protocols.
+#
+
+# Exit immediately on any error
+set -e
+
+program=wayland-protocols
+version=1.43
+release=0
+
+# Define a category for the output of the package name
+pkgcategory=libs
+
+tarname=${program}-${version}.tar.xz
+
+# Remote source(s)
+fetch=https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/$version/downloads/$tarname
+
+description="Protocols and protocol extensions complementing the Wayland core protocol"
+
+homepage=https://wayland.freedesktop.org
+license="MIT"
+jobs=2
+
+build()
+{
+    unpack "${tardir}/$tarname"
+
+    cd "$srcdir"
+
+    # Set sane permissions
+    chmod -R u+w,go-w,a+rX-s .
+
+    rm -rf BUILD
+    mkdir BUILD
+    cd BUILD
+
+    CPPFLAGS="$QICPPFLAGS" CFLAGS="$QICFLAGS" LDFLAGS="$QILDFLAGS" \
+    meson setup $configure_args \
+	-Dtests=false \
+	..
+
+    ninja -j${jobs}
+    DESTDIR="$destdir" ninja -j${jobs} install
+
+    cd ..
+}

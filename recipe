@@ -4,8 +4,8 @@
 set -e
 
 program=hyprland
-version=0.48.1
-_commit="29e2e59fdbab8ed2cc23a20e3c6043d5decb5cdc"
+version=0.49.0
+_commit="9958d297641b5c84dcff93f9039d80a5ad37ab00"
 release=0
 description="Independent, highly customizable, dynamic tiling Wayland compositor that doesn't sacrifice on its looks."
 homepage="https://hyprland.org"
@@ -23,6 +23,8 @@ build()
 	
 	# Set sane permissions
 	chmod -R u+w,go-w,a+rX-s .
+
+	patch -p1 -i ${worktree}/include-cstring.patch
 
 	# Set some variables in version.h.in
 	sed -i "s/@HASH@/$_commit/" src/version.h.in

@@ -9,6 +9,7 @@ These are Hyprland build recipe and its dependencies. These are ported from alpi
 
 These are the build order, just skip if you already installed the dependency(ies) !
 
+1. wayland-protocols
 1. hyprland-protocols
 1. hyprutils
 1. pugixml
