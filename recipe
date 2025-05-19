@@ -1,0 +1,43 @@
+# Build recipe for hyprland.
+#
+# Exit immediately on any error
+set -e
+
+program=hyprland
+version=0.48.1
+_commit="29e2e59fdbab8ed2cc23a20e3c6043d5decb5cdc"
+release=0
+description="Independent, highly customizable, dynamic tiling Wayland compositor that doesn't sacrifice on its looks."
+homepage="https://hyprland.org"
+license="BSD-3-Clause"
+
+tarname=Hyprland-v$version.tar.gz
+fetch="https://github.com/hyprwm/Hyprland/archive/v$version/$tarname"
+srcdir="Hyprland-$version"
+
+build() 
+{
+	unpack "${tardir}/$tarname"
+	
+	cd "$srcdir"
+	
+	# Set sane permissions
+	chmod -R u+w,go-w,a+rX-s .
+
+	# Set some variables in version.h.in
+	sed -i "s/@HASH@/$_commit/" src/version.h.in
+	sed -i "s/@BRANCH@/build-lfs_musl/" src/version.h.in
+	sed -i "s/@TAG@/v$version/" src/version.h.in
+
+	rm -rf BUILD
+	mkdir BUILD
+	cd BUILD
+	
+	CPPFLAGS="$QICPPFLAGS" CFLAGS="$QICFLAGS" LDFLAGS="$QILDFLAGS" \
+	meson setup $configure_args ..
+	
+	ninja -j4
+	DESTDIR="$destdir" ninja -j2 install
+	
+	cd ..
+}

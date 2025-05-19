@@ -1,0 +1,34 @@
+# Build recipe for hyprgraphics.
+#
+# Exit immediately on any error
+set -e
+
+program=hyprgraphics
+version=0.1.3
+release=0
+description="Hyprland graphics / resource utilities"
+homepage="https://github.com/hyprwm/hyprgraphics"
+license="BSD-3-Clause"
+
+tarname=hyprgraphics-v$version.tar.gz
+fetch="https://github.com/hyprwm/hyprgraphics/archive/v$version/$tarname"
+
+build() 
+{
+	unpack "${tardir}/$tarname"
+	
+	cd "$srcdir"
+	
+	# Set sane permissions
+	chmod -R u+w,go-w,a+rX-s .
+
+	patch -p1 -i ${worktree}/big-endian-jpeg.patch
+
+	cmake -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_BUILD_TYPE=None
+	cmake --build build
+
+	DESTDIR="$destdir" cmake --install build
+}

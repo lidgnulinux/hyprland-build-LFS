@@ -1,0 +1,36 @@
+# Build recipe for tomlplusplus.
+#
+# Exit immediately on any error
+set -e
+
+program=tomlplusplus
+version=3.4.0
+release=0
+description="Header-only TOML config file parser and serializer for C++17."
+homepage="https://marzer.github.io/tomlplusplus/"
+license="MIT"
+
+tarname=tomlplusplus-v3.4.0.tar.gz
+fetch="https://github.com/marzer/tomlplusplus/archive/v3.4.0/$tarname"
+
+build() 
+{
+	unpack "${tardir}/$tarname"
+	
+	cd "$srcdir"
+	
+	# Set sane permissions
+	chmod -R u+w,go-w,a+rX-s .
+
+	rm -rf BUILD
+	mkdir BUILD
+	cd BUILD
+	
+	CPPFLAGS="$QICPPFLAGS" CFLAGS="$QICFLAGS" LDFLAGS="$QILDFLAGS" \
+	meson setup $configure_args ..
+	
+	ninja -j2
+	DESTDIR="$destdir" ninja -j2 install
+	
+	cd ..
+}

@@ -1,0 +1,39 @@
+# Build recipe for yambar.
+#
+# Exit immediately on any error
+set -e
+
+program=yambar
+version=1.11.0
+release=0
+description="Modular status panel for X11 and Wayland, inspired by Polybar"
+homepage="https://codeberg.org/dnkl/yambar"
+license="MIT"
+
+tarname=$version.tar.gz
+fetch="https://codeberg.org/dnkl/yambar/archive/$tarname"
+srcdir=$program
+
+build() 
+{
+	unpack "${tardir}/$tarname"
+	
+	cd "$srcdir"
+	
+	# Set sane permissions
+	chmod -R u+w,go-w,a+rX-s .
+
+	patch -p1 -i ${worktree}/fix-missing-break-in-switch-statement.patch
+
+	rm -rf BUILD
+	mkdir BUILD
+	cd BUILD
+	
+	CPPFLAGS="$QICPPFLAGS" CFLAGS="$QICFLAGS" LDFLAGS="$QILDFLAGS" \
+	meson setup $configure_args ..
+	
+	ninja -j2
+	DESTDIR="$destdir" ninja -j2 install
+	
+	cd ..
+}

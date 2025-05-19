@@ -1,0 +1,36 @@
+# Build recipe for pugixml.
+#
+# Exit immediately on any error
+set -e
+
+program=pugixml
+version=1.15
+release=0
+description="Light-weight, simple and fast XML parser for C++ with XPath support"
+homepage="https://pugixml.org"
+license="MIT"
+
+tarname=pugixml-$version.tar.gz
+fetch="https://github.com/zeux/pugixml/archive/refs/tags/v$version/$tarname"
+
+srcdir=
+
+build() 
+{
+	unpack "${tardir}/$tarname"
+	
+	cd "$srcdir"
+	
+	# Set sane permissions
+	chmod -R u+w,go-w,a+rX-s .
+
+	cmake -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_SHARED_LIBS=True \
+		-DCMAKE_BUILD_TYPE=None \
+		-DPUGIXML_BUILD_TESTS="OFF"
+	cmake --build build
+
+	DESTDIR="$destdir" cmake --install build
+}

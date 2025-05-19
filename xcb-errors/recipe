@@ -1,0 +1,46 @@
+# Build recipe for xcb-util-errors.
+#
+# Exit immediately on any error
+set -e
+
+program=xcb-util-errors
+version=1.0.1
+_m4_gitrev="c617eee22ae5c285e79e81ec39ce96862fd3262f"
+release=0
+description="XCB utility library that gives human readable names to error, event, & request codes"
+homepage="https://gitlab.freedesktop.org/xorg/lib/libxcb-errors"
+license="X11-distribute-modifications-variant"
+
+tarname=libxcb-errors-xcb-util-errors-$version.tar.gz
+m4tarname=xcb-util-m4-$_m4_gitrev.tar.gz
+fetch="
+	https://gitlab.freedesktop.org/xorg/lib/libxcb-errors/-/archive/xcb-util-errors-$version/$tarname
+	https://gitlab.freedesktop.org/xorg/util/xcb-util-m4/-/archive/$_m4_gitrev/$m4tarname
+"
+
+srcdir="libxcb-errors-xcb-util-errors-$version"
+
+build() 
+{
+	unpack "${tardir}/$tarname"
+	
+	cd "$srcdir"
+	
+	# Set sane permissions
+	chmod -R u+w,go-w,a+rX-s .
+
+	patch -p1 -i ${worktree}/fixtest.patch
+
+	rmdir m4
+	unpack "${tardir}/$m4tarname"
+	mv xcb-util-m4-"$_m4_gitrev" m4
+	libtoolize
+	aclocal
+	autoconf
+	automake --add-missing
+
+	./configure --prefix=/usr --libdir=/usr/lib
+
+	make 
+	make DESTDIR="$destdir" install 
+}

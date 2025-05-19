@@ -1,0 +1,35 @@
+# Build recipe for nlohmann-json.
+#
+# Exit immediately on any error
+set -e
+
+program=nlohmann-json
+version=3.11.3
+release=0
+description="JSON for Modern C++"
+homepage="https://github.com/nlohmann/json"
+license="MIT"
+
+tarname=nlohmann-json-$version.tar.gz
+fetch="https://github.com/nlohmann/json/archive/v$version/$tarname"
+
+srcdir=json-$version
+
+build() 
+{
+	unpack "${tardir}/$tarname"
+	
+	cd "$srcdir"
+	
+	# Set sane permissions
+	chmod -R u+w,go-w,a+rX-s .
+
+	cmake -B build -G Ninja \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DJSON_MultipleHeaders=ON
+	cmake --build build
+
+	DESTDIR="$destdir" cmake --install build
+}

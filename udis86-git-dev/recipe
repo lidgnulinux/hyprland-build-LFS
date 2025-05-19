@@ -1,0 +1,34 @@
+# Build recipe for udis86-git.
+#
+# Exit immediately on any error
+set -e
+
+program=udis86-git
+version=1.7.2_git20221013
+_commit=5336633af70f3917760a6d441ff02d93477b0c86
+release=0
+description="Disassembler Library for x86 and x86-64"
+homepage="https://github.com/canihavesomecoffee/udis86"
+license="BSD-2-Clause"
+
+tarname=udis86-$_commit.tar.gz
+fetch="https://github.com/canihavesomecoffee/udis86/archive/$_commit/$tarname"
+
+srcdir=udis86-$_commit
+
+build() 
+{
+	unpack "${tardir}/$tarname"
+	
+	cd "$srcdir"
+	
+	# Set sane permissions
+	chmod -R u+w,go-w,a+rX-s .
+
+	mkdir -p build/m4
+	autoreconf --force -v --install
+	./configure --prefix=/usr --libdir=/usr/lib --enable-shared
+
+	make
+	make DESTDIR="$destdir" install 
+}

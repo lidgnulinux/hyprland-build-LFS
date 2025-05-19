@@ -1,0 +1,36 @@
+# Build recipe for libzip.
+#
+# Exit immediately on any error
+set -e
+
+program=libzip
+version=1.11.2
+release=0
+description="C library for manipulating zip archives"
+homepage="https://libzip.org/"
+license="BSD-3-Clause"
+
+tarname=libzip-$version.tar.xz
+fetch="https://libzip.org/download/$tarname"
+
+build() 
+{
+	unpack "${tardir}/$tarname"
+	
+	cd "$srcdir"
+	
+	# Set sane permissions
+	chmod -R u+w,go-w,a+rX-s .
+
+	cmake -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_EXAMPLES=OFF \
+		-DENABLE_BZIP2=ON \
+		-DENABLE_LZMA=ON \
+		-DENABLE_ZSTD=ON \
+		-DCMAKE_BUILD_TYPE=MinSizeRel
+	cmake --build build
+
+	DESTDIR="$destdir" cmake --install build
+}
