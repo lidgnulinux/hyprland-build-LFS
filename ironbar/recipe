@@ -1,0 +1,36 @@
+# Build recipe for ironbar.
+#
+# Exit immediately on any error
+set -e
+
+program=ironbar
+version=0.16.1-git
+release=0
+description="Customisable Wayland gtk bar written in Rust."
+homepage="https://crates.io/crates/ironbar"
+license="MIT"
+
+tarname=master.tar.gz
+fetch="https://github.com/JakeStanger/ironbar/archive/refs/heads/$tarname"
+srcdir=ironbar-master
+
+build() 
+{
+	unpack "${tardir}/$tarname"
+	
+	cd "$srcdir"
+	
+	# Set sane permissions
+	chmod -R u+w,go-w,a+rX-s .
+
+	patch -p0 -i ${worktree}/Cargo.lock.patch
+    
+        export RUSTFLAGS="$RUSTFLAGS -C target-feature=-crt-static"
+	
+	cargo build --release
+
+	mkdir -p "$destdir/usr/bin/"
+	mkdir -p "$destdir/usr/share/ironbar/"
+	install -vDm4755 target/release/ironbar "$destdir/usr/bin/ironbar"
+	cp -r examples/* "$destdir/usr/share/ironbar/"
+}

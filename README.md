@@ -29,4 +29,5 @@ These are the build order, just skip if you already installed the dependency(ies
 1. xcb-errors
 1. udis86-git
 1. yambar (optional bar)
+1. ironbar (optional bar)
 1. hyprland
