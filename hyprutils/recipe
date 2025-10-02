@@ -4,7 +4,7 @@
 set -e
 
 program=hyprutils
-version=0.7.1
+version=0.8.4
 release=0
 description="Hyprland utilities library used across the ecosystem"
 homepage="https://github.com/hyprwm/hyprutils"

@@ -4,7 +4,7 @@
 set -e
 
 program=glaze
-version=4.4.3
+version=5.7.2
 release=0
 description="An Extremely fast, In-Memory JSON and Interface Library for Modern C++"
 homepage="https://github.com/stephenberry/glaze"

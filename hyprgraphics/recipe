@@ -4,7 +4,7 @@
 set -e
 
 program=hyprgraphics
-version=0.1.3
+version=0.1.6
 release=0
 description="Hyprland graphics / resource utilities"
 homepage="https://github.com/hyprwm/hyprgraphics"

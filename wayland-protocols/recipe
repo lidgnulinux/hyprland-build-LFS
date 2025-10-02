@@ -5,7 +5,7 @@
 set -e
 
 program=wayland-protocols
-version=1.43
+version=1.45
 release=0
 
 # Define a category for the output of the package name
