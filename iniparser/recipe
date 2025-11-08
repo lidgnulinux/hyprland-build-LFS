@@ -1,0 +1,36 @@
+# Build recipe for iniparser.
+#
+# Exit immediately on any error
+set -e
+
+program=iniparser
+version=4.2.6
+release=0
+description="C library for parsing INI-style files"
+homepage="https://github.com/ndevilla/iniparser"
+license="MIT"
+
+tarname=v$version.tar.gz
+fetch="https://github.com/ndevilla/iniparser/archive/$tarname"
+
+srcdir=
+
+build() 
+{
+	unpack "${tardir}/$tarname"
+	
+	cd "$srcdir"
+	
+	# Set sane permissions
+	chmod -R u+w,go-w,a+rX-s .
+
+	cmake -B build -G Ninja \
+		-DBUILD_SHARED_LIBS=ON \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=/usr/lib \
+		-DBUILD_TESTING=OFF
+	cmake --build build
+
+	DESTDIR="$destdir" cmake --install build
+}

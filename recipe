@@ -6,7 +6,7 @@ set -e
 program=hyprland
 version=0.52.0
 _commit="f56ec180d3a03a5aa978391249ff8f40f949fb73"
-release=0
+release=1
 description="Independent, highly customizable, dynamic tiling Wayland compositor that doesn't sacrifice on its looks."
 homepage="https://hyprland.org"
 license="BSD-3-Clause"
