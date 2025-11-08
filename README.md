@@ -2,7 +2,7 @@
 
 ## What are these ? 
 
-These are Hyprland build recipe and its dependencies. These are ported from alpine's APKBUILDs to qi's recipes.  
+These are Hyprland build recipe and its dependencies. These are ported from alpine's APKBUILDs to qi's recipes. I also use some slackbuild scripts.   
 
 
 ## Build order.
