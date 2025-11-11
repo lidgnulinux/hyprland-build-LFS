@@ -26,9 +26,9 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=re2
-VERSION=${VERSION:-2025_08_12}
+VERSION=${VERSION:-2025_11_05}
 PKGVER=$(echo $VERSION | tr _ -)
-BUILD=${BUILD:-3}
+BUILD=${BUILD:-0}
 TAG=${TAG:-_nwg}
 PKGTYPE=${PKGTYPE:-txz}
 # wget -c https://github.com/google/$PRGNAM/archive/$PKGVER/$PRGNAM-$PKGVER.tar.gz
@@ -105,4 +105,4 @@ mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
-/sbin/makepkg-slackware -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE
+/sbin/makepkg-slackware -l y -c n /var/cache/slack/amd64/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE
